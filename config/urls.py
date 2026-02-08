@@ -6,8 +6,8 @@ def healthcheck(request):
     return HttpResponse("Django is alive on Render")
 
 urlpatterns = [
-    path("health/", healthcheck),   # ← 追加（最重要）
+    #path("health/", healthcheck),   # ← 追加（最重要）
     path("admin/", admin.site.urls),
-    path("", include("blog.urls")),
+    #path("", include("blog.urls")),
     #path("", include("users.urls")),
 ]

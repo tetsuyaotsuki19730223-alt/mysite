@@ -24,7 +24,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 if not SECRET_KEY:
     SECRET_KEY = "django-insecure-fallback-for-render"
 
-    
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 ALLOWED_HOSTS = ["*"]
@@ -47,9 +47,7 @@ INSTALLED_APPS = [
 
     #"members.apps.MembersConfig",
     'blog',
-    #'users', 
     
-    #'users.apps.UsersConfig',    
        
     #'conversions',
     #'payments.apps.PaymentsConfig',
