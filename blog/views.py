@@ -1,6 +1,9 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Post
+from django.http import HttpResponse
 
+def index(request):
+    return HttpResponse("Hello, Django is running!")
 
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk, is_published=True)
