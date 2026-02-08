@@ -11,3 +11,4 @@ asgiref==3.8.1
 gunicorn
 dj-database-url
 psycopg2-binary
+stripe
