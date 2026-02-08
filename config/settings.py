@@ -182,4 +182,4 @@ STRIPE_SUCCESS_URL = "http://127.0.0.1:8000/users/mypage/"
 STRIPE_CANCEL_URL = "http://127.0.0.1:8000/users/mypage/"
 STRIPE_PORTAL_RETURN_URL = "http://127.0.0.1:8000/users/mypage/"
 
-
+REDEPLOY=1
