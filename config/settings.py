@@ -20,19 +20,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv(
-    "SECRET_KEY",
-    "django-insecure-temporary-dev-key"        
-    "django-insecure-local-fallback-key-1234567890"
-)
+SECRET_KEY = os.environ.get("SECRET_KEY")
+if not SECRET_KEY:
+    SECRET_KEY = "django-insecure-fallback-for-render"
 
+    
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = [
-    ".onrender.com",
-    "localhost",
-    "127.0.0.1",
-]
+ALLOWED_HOSTS = ["*"]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://your-app-name.onrender.com",
@@ -52,7 +47,7 @@ INSTALLED_APPS = [
 
     #"members.apps.MembersConfig",
     'blog',
-    'users', 
+    #'users', 
     
     #'users.apps.UsersConfig',    
        
