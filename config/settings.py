@@ -23,10 +23,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv(
     "SECRET_KEY",
     "django-insecure-temporary-dev-key"        
+    "django-insecure-local-fallback-key-1234567890"
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 ALLOWED_HOSTS = [
     ".onrender.com",
     "localhost",
