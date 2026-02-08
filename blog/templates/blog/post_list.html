@@ -1,0 +1,31 @@
+<!-- blog/templates/blog/post_list.html -->
+<h1>記事一覧</h1>
+
+<ul>
+{% for post in posts %}
+  <li>
+    {% if post.is_premium %}
+      {% if user.is_authenticated and user.profile.is_subscribed %}
+        <a href="{% url 'blog:detail' post.id %}">
+          {{ post.title }}
+        </a>
+        <span class="badge premium">PREMIUM</span>
+      {% else %}
+        🔒 {{ post.title }}
+        <span class="badge lock">PREMIUM</span>
+        <a href="{% url 'payments:subscribe' %}">購読する</a>
+      {% endif %}
+    {% else %}
+      <a href="{% url 'blog:detail' post.id %}">
+        {{ post.title }}
+      </a>
+    {% endif %}
+  </li>
+{% endfor %}
+</ul>
+
+<style>
+.badge { padding: 2px 6px; border-radius: 4px; font-size: 12px; }
+.badge.premium { background:#f5b700; color:#000; }
+.badge.lock { background:#ddd; color:#555; }
+</style>

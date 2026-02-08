@@ -1,0 +1,21 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'users/mypage.css' %}">
+
+<h1>マイページ</h1>
+
+<hr>
+
+{% if profile.is_subscribed %}
+    <p>✅ 有料会員です</p>
+
+    <a href="{% url 'payments:customer_portal' %}">
+        Stripe管理画面へ
+    </a>
+
+{% else %}
+    <p>🔒 現在は無料会員です</p>
+
+    <a href="{% url 'payments:subscribe' %}">
+        サブスク登録する
+    </a>
+{% endif %}

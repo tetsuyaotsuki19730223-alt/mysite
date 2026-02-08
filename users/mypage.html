@@ -1,0 +1,22 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'users/mypage.css' %}">
+
+<h1>マイページ</h1>
+
+{% if is_paid %}
+  <p>💎 プレミアム会員</p>
+
+{% elif is_trial %}
+  <p>🎁 トライアル中（残り {{ trial_days_left }} 日）</p>
+  <a href="{% url 'subscribe' %}">今すぐ課金</a>
+
+{% else %}
+  <p>🔒 トライアル終了</p>
+  <a href="{% url 'subscribe' %}">課金して続ける</a>
+{% endif %}
+
+<!--
+<a href="{% url 'payments:customer_portal' %}">
+    支払い情報を管理する
+</a>
+-->

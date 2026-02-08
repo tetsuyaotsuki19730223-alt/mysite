@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>マイページ</h2>
+
+<p><strong>ユーザー名：</strong>{{ user.username }}</p>
+<p><strong>メール：</strong>{{ user.email }}</p>
+
+<hr>
+
+{% if user.userprofile.is_paid_member %}
+  <p style="color: green;">✅ 有料会員です</p>
+
+  <ul>
+    <li><a href="/blog/">会員限定ブログを見る</a></li>
+  </ul>
+
+{% else %}
+  <p style="color: red;">❌ 無料会員です</p>
+
+  <a href="{% url 'subscribe' %}">▶ 有料会員になる</a>
+{% endif %}
+
+<hr>
+
+<a href="{% url 'logout' %}">ログアウト</a>
+
+{% endblock %}

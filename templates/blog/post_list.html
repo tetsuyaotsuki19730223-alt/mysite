@@ -1,0 +1,20 @@
+<!-- templates/blog/post_list.html -->
+
+<h1>記事一覧</h1>
+
+<ul>
+{% for post in posts %}
+  <li>
+    {% if post.is_premium %}
+      🔒 <a href="{% url 'blog:post_detail' post.id %}">
+        {{ post.title }}
+      </a>
+      <span style="color:#888;">（プレミアム）</span>
+    {% else %}
+      <a href="{% url 'blog:post_detail' post.id %}">
+        {{ post.title }}
+      </a>
+    {% endif %}
+  </li>
+{% endfor %}
+</ul>

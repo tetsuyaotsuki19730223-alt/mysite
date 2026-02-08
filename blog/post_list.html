@@ -1,0 +1,17 @@
+<h1>記事一覧</h1>
+
+<ul class="post-list">
+  {% for post in posts %}
+    <li class="post-item">
+      <a href="{% url 'blog:post_detail' post.id %}">
+        {{ post.title }}
+      </a>
+
+      {% if post.is_paid %}
+        <span class="badge badge-paid">🔒 有料</span>
+      {% else %}
+        <span class="badge badge-free">🆓 無料</span>
+      {% endif %}
+    </li>
+  {% endfor %}
+</ul>

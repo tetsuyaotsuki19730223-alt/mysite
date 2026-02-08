@@ -1,0 +1,13 @@
+<h1>{{ object.title }}</h1>
+
+{% if can_read_full %}
+  <p>{{ object.content }}</p>
+{% else %}
+  <p>{{ object.free_content }}</p>
+
+  <hr>
+  <p><strong>この先は有料です</strong></p>
+  <p>
+    <a href="/payments/subscribe/">▶ サブスク登録はこちら</a>
+  </p>
+{% endif %}

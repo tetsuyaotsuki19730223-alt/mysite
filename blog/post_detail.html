@@ -1,0 +1,51 @@
+<h1>{{ post.title }}</h1>
+
+{% if post.is_premium %}
+    {% if user.is_authenticated and user.profile.is_subscribed %}
+        <!-- ✅ 有料ユーザー -->
+        <div class="post-body">
+            {{ post.content|linebreaks }}
+        </div>
+    {% else %}
+        <!-- ❌ 無料ユーザー -->
+        <div class="post-body">
+            {{ post.content|truncatechars:200|linebreaks }}
+        </div>
+
+        <div class="premium-cta">
+            <hr>
+            <h3>🔒 この記事はプレミアム限定です</h3>
+            <p>続きを読むにはサブスクリプション登録が必要です。</p>
+
+            <a href="/payments/subscribe/" class="btn">
+                ▶ プレミアム登録して続きを読む
+            </a>
+        </div>
+    {% endif %}
+{% else %}
+    <!-- 無料記事 -->
+    <div class="post-body">
+        {{ post.content|linebreaks }}
+    </div>
+{% endif %}
+
+<style>
+.premium-cta {
+    margin-top: 30px;
+    padding: 20px;
+    background: #fff3cd;
+    border: 1px solid #ffeeba;
+    text-align: center;
+}
+
+.premium-cta .btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 16px;
+    background: #ff9800;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 4px;
+}
+</style>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ post.title }}</title>
+</head>
+<body>
+
+<h1>{{ post.title }}</h1>
+
+<div>
+    {{ post.free_content|linebreaks }}
+</div>
+
+{% if can_view_premium %}
+    <hr>
+    <div>
+        {{ post.premium_content|linebreaks }}
+    </div>
+{% else %}
+    <hr>
+    {% if reason == "login_required" %}
+        <p>続きを読むにはログインが必要です。</p>
+    {% elif reason == "subscription_required" %}
+        <p>続きを読むには有料プランへの登録が必要です。</p>
+    {% endif %}
+{% endif %}
+
+</body>
+</html>

@@ -1,0 +1,10 @@
+Django==4.2.16
+django-allauth==65.14.0
+django-environ==0.11.2
+django-extensions==3.2.3
+django-crispy-forms==2.1
+crispy-bootstrap5==2024.2
+django-debug-toolbar==4.4.6
+python-dotenv==1.0.1
+sqlparse==0.5.1
+asgiref==3.8.1

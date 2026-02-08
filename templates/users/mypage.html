@@ -1,0 +1,56 @@
+<h1>マイページ</h1>
+
+<hr>
+
+{% if is_paid %}
+  <h2>🟢 有料会員</h2>
+  <p>現在、プレミアム機能をご利用中です。</p>
+
+    支払い情報を管理する
+  </a>
+
+{% elif is_trial %}
+  <h2>🟡 無料トライアル中</h2>
+  <p>
+    あと <strong>{{ trial_days_left }}日</strong> 利用できます
+  </p>
+
+  <a href="{% url 'payments:subscribe' %}">
+    このまま有料プランに切り替える
+  </a>
+
+{% else %}
+  <h2>🔴 未課金</h2>
+  <p>
+    プレミアム記事・限定機能は<br>
+    有料会員のみ利用できます。
+  </p>
+
+  <a href="{% url 'payments:subscribe' %}">
+    今すぐ登録する
+  </a>
+{% endif %}
+
+<hr>
+
+{% if can_view_premium %}
+  <p>✅ プレミアム記事：閲覧可能</p>
+{% else %}
+  <p>❌ プレミアム記事：閲覧不可</p>
+{% endif %}
+
+
+{% if profile.stripe_customer_id %}
+    請求情報を管理する
+  </a>
+{% endif %}
+
+{% if not is_paid %}
+  <!--<a href="{% url 'payments:subscribe' %}">-->
+    サブスク登録する
+  </a>
+{% else %}
+  <p>課金中です</p>
+    支払い管理
+  </a>
+{% endif %}

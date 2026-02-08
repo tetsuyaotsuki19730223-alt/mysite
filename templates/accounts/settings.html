@@ -1,0 +1,10 @@
+<h2>サブスクリプション</h2>
+
+{% if request.user.profile.is_subscribed %}
+    <p>✅ 有料会員です</p>
+    <a href="{% url 'payments:customer_portal' %}">
+        解約・支払い情報を変更する
+    </a>
+{% else %}
+    <p>❌ 無料会員です</p>
+{% endif %}

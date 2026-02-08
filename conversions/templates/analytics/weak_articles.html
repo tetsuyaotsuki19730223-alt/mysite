@@ -1,0 +1,19 @@
+<h1>改善対象の記事</h1>
+
+<table>
+  <tr>
+    <th>記事</th>
+    <th>表示</th>
+    <th>CV</th>
+    <th>CV率</th>
+  </tr>
+
+  {% for post in posts %}
+  <tr>
+    <td>{{ post.title }}</td>
+    <td>{{ post.views }}</td>
+    <td>{{ post.conversions }}</td>
+    <td>{{ post.cv_rate|floatformat:2 }}</td>
+  </tr>
+  {% endfor %}
+</table>
