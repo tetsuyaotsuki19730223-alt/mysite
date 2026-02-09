@@ -1,4 +1,3 @@
-import stripe
 from django.conf import settings
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -8,7 +7,15 @@ from django.shortcuts import redirect, render
 
 from .models import Profile
 
+try:
+    import stripe
+except ImportError:
+    stripe = None
+
 stripe.api_key = settings.STRIPE_SECRET_KEY
+
+if stripe is None:
+    return HttpResponse("Stripe is not available", status=503)
 
 
 @csrf_exempt
