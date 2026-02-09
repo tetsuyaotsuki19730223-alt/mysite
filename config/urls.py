@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.http import HttpResponse
 
 def health(request):
@@ -8,4 +8,5 @@ def health(request):
 urlpatterns = [
     path("health/", health),
     path("admin/", admin.site.urls),
+    path("", include("users.urls")),
 ]
