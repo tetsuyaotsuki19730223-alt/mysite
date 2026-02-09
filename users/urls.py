@@ -1,9 +1,7 @@
 from django.urls import path
-from django.http import HttpResponse
-
-def test(request):
-    return HttpResponse("users urls OK")
+from .views import create_checkout_session, stripe_webhook
 
 urlpatterns = [
-    path("subscribe/", test),
+    path("subscribe/", create_checkout_session, name="subscribe"),
+    path("stripe/webhook/", stripe_webhook, name="stripe-webhook"),
 ]

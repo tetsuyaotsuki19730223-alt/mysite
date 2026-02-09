@@ -1,64 +1,34 @@
-import json
 from django.conf import settings
 from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth import get_user_model
+from django.shortcuts import redirect
 
-@csrf_exempt
-def stripe_webhook(request):
-    # Stripe 無効なら何もしない（admin保護）
+def get_stripe():
     if not settings.STRIPE_ENABLED:
-        return HttpResponse(status=200)
-
+        return None
     try:
         import stripe
         stripe.api_key = settings.STRIPE_SECRET_KEY
+        return stripe
     except ImportError:
-        return HttpResponse(status=200)
+        return None
 
-    payload = request.body
-    sig_header = request.META.get("HTTP_STRIPE_SIGNATURE")
-    endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
-
-    try:
-        event = stripe.Webhook.construct_event(
-            payload, sig_header, endpoint_secret
-        )
-    except Exception:
-        # 署名エラーでも 200 を返す（Stripe再送防止）
-        return HttpResponse(status=200)
-
-    # 🔔 イベント処理
-    if event["type"] == "checkout.session.completed":
-        session = event["data"]["object"]
-
-        handle_checkout_completed(session)
-
-    return HttpResponse(status=200)
-
-User = get_user_model()
-
-def handle_checkout_completed(session):
-    """
-    支払い完了時の処理
-    """
-    customer_id = session.get("customer")
-    email = session.get("customer_details", {}).get("email")
-
-    if not email:
-        return
-
-    try:
-        user = User.objects.get(email=email)
-    except User.DoesNotExist:
-        return
-
-    # 例：Profile がある場合
-    profile = getattr(user, "profile", None)
-    if profile:
-        profile.is_subscribed = True
-        profile.stripe_customer_id = customer_id
-        profile.save()
 
 def create_checkout_session(request):
-    return HttpResponse("OK subscribe") 
+    stripe = get_stripe()
+    if stripe is None:
+        return HttpResponse("Stripe is disabled", status=503)
+
+    session = stripe.checkout.Session.create(
+        payment_method_types=["card"],
+        mode="subscription",
+        line_items=[
+            {
+                "price": "price_xxxxxxxxx",  # ← Test mode の Price ID
+                "quantity": 1,
+            }
+        ],
+        success_url="https://mysite-admin.onrender.com/success/",
+        cancel_url="https://mysite-admin.onrender.com/cancel/",
+    )
+
+    return redirect(session.url)
