@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("SECRET_KEY")
 if not SECRET_KEY:
-    SECRET_KEY = "django-insecure-fallback-for-render"
+    SECRET_KEY = "django-insecure-hardcoded-fallback-key-for-render"
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -42,16 +42,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    #'django_extensions',
-
-    #"members.apps.MembersConfig",
-    'blog',
-    
-       
-    #'conversions',
-    #'payments.apps.PaymentsConfig',
-    
 ]
 
 AUTH_USER_MODEL = "members.User"
