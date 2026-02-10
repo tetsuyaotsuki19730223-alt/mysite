@@ -5,16 +5,20 @@ import traceback
 def subscribe(request):
     try:
         return HttpResponse(
-            f"""
-            STRIPE_ENABLED={settings.STRIPE_ENABLED}
-            PRICE_ID={settings.STRIPE_PRICE_ID}
-            SECRET_SET={bool(settings.STRIPE_SECRET_KEY)}
-            """,
+            "\n".join([
+                "SUBSCRIBE VIEW OK",
+                f"STRIPE_SECRET_SET={bool(settings.STRIPE_SECRET_KEY)}",
+                f"STRIPE_PRICE_ID={repr(settings.STRIPE_PRICE_ID)}",
+                f"STRIPE_ENABLED={settings.STRIPE_ENABLED}",
+            ]),
             content_type="text/plain"
         )
-    except Exception as e:
-        return HttpResponse(
-            traceback.format_exc(),
-            status=500,
-            content_type="text/plain"
-        )
+    except Exception:
+        return HttpResponse(traceback.format_exc(), status=500)
+
+
+def stripe_webhook(request):
+    try:
+        return HttpResponse("WEBHOOK OK", content_type="text/plain")
+    except Exception:
+        return HttpResponse(traceback.format_exc(), status=500)
