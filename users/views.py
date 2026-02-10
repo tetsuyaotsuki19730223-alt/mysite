@@ -1,24 +1,25 @@
-from django.http import HttpResponse
 from django.conf import settings
-import traceback
+from django.shortcuts import redirect
+from django.http import HttpResponse
+import stripe
 
 def subscribe(request):
-    try:
-        return HttpResponse(
-            "\n".join([
-                "SUBSCRIBE VIEW OK",
-                f"STRIPE_SECRET_SET={bool(settings.STRIPE_SECRET_KEY)}",
-                f"STRIPE_PRICE_ID={repr(settings.STRIPE_PRICE_ID)}",
-                f"STRIPE_ENABLED={settings.STRIPE_ENABLED}",
-            ]),
-            content_type="text/plain"
-        )
-    except Exception:
-        return HttpResponse(traceback.format_exc(), status=500)
+    if not settings.STRIPE_ENABLED:
+        return HttpResponse("Stripe disabled", status=503)
 
+    stripe.api_key = settings.STRIPE_SECRET_KEY
 
-def stripe_webhook(request):
-    try:
-        return HttpResponse("WEBHOOK OK", content_type="text/plain")
-    except Exception:
-        return HttpResponse(traceback.format_exc(), status=500)
+    session = stripe.checkout.Session.create(
+        mode="subscription",
+        payment_method_types=["card"],
+        line_items=[
+            {
+                "price": settings.STRIPE_PRICE_ID,
+                "quantity": 1,
+            }
+        ],
+        success_url="https://mysite-2-w9ja.onrender.com/success/",
+        cancel_url="https://mysite-2-w9ja.onrender.com/cancel/",
+    )
+
+    return redirect(session.url, code=303)
