@@ -2,22 +2,35 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.shortcuts import redirect
 
+
+def get_stripe():
+    if not settings.STRIPE_ENABLED:
+        return None
+
+    try:
+        import stripe
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+        return stripe
+    except ImportError:
+        return None
+
+
 def subscribe(request):
-    stripe_secret = getattr(settings, "STRIPE_SECRET_KEY", None)
-    price_id = getattr(settings, "STRIPE_PRICE_ID", None)
-
-    if not stripe_secret or not price_id:
+    stripe = get_stripe()
+    if stripe is None:
         return HttpResponse("Stripe is not configured", status=503)
-
-    import stripe
-    stripe.api_key = stripe_secret
 
     session = stripe.checkout.Session.create(
         mode="subscription",
         payment_method_types=["card"],
-        line_items=[{"price": price_id, "quantity": 1}],
-        success_url="https://mysite-admin.onrender.com/success/",
-        cancel_url="https://mysite-admin.onrender.com/cancel/",
+        line_items=[
+            {
+                "price": settings.STRIPE_PRICE_ID,
+                "quantity": 1,
+            }
+        ],
+        success_url=request.build_absolute_uri("/subscribe/success/"),
+        cancel_url=request.build_absolute_uri("/subscribe/cancel/"),
     )
 
     return redirect(session.url)
