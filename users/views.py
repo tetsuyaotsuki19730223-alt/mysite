@@ -1,8 +1,12 @@
 from django.shortcuts import redirect
-import stripe
+from django.http import HttpResponse
 from django.conf import settings
 
 def subscribe(request):
+    if not settings.STRIPE_ENABLED:
+        return HttpResponse("Stripe is disabled", status=503)
+
+    import stripe
     stripe.api_key = settings.STRIPE_SECRET_KEY
 
     session = stripe.checkout.Session.create(
