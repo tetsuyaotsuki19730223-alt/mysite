@@ -9,7 +9,10 @@ SECRET_KEY = os.environ.get(
 )
 
 DEBUG = False
-ALLOWED_HOSTS = ["mysite-admin.onrender.com"]
+ALLOWED_HOSTS = [
+    "mysite-2-w9ja.onrender.com",
+    ".onrender.com",
+]
 
 INSTALLED_APPS = [
     "django.contrib.admin",
