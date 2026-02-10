@@ -1,7 +1,12 @@
-# users/views.py
 from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
 
-@csrf_exempt
-def stripe_webhook(request):
-    return HttpResponse("ok")
+def subscribe(request):
+    return HttpResponse(
+        f"""
+    SUBSCRIBE VIEW OK
+    STRIPE_SECRET_SET={bool(settings.STRIPE_SECRET_KEY)}
+    STRIPE_PRICE_ID='{settings.STRIPE_PRICE_ID}'
+    STRIPE_ENABLED={settings.STRIPE_ENABLED}
+    """
+    )
