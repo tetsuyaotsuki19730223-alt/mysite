@@ -23,3 +23,19 @@ def subscribe(request):
     )
 
     return redirect(session.url)
+
+def success(request):
+    return HttpResponse(
+        """
+        <h1>支払いが完了しました 🎉</h1>
+        <p>ご利用ありがとうございます。</p>
+        """
+    )
+
+def cancel(request):
+    return HttpResponse(
+        """
+        <h1>支払いはキャンセルされました</h1>
+        <p>いつでも再開できます。</p>
+        """
+    )
