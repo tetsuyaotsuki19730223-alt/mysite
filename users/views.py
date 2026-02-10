@@ -1,25 +1,7 @@
-from django.conf import settings
-from django.shortcuts import redirect
+# users/views.py
 from django.http import HttpResponse
-import stripe
+from django.views.decorators.csrf import csrf_exempt
 
-def subscribe(request):
-    if not settings.STRIPE_ENABLED:
-        return HttpResponse("Stripe disabled", status=503)
-
-    stripe.api_key = settings.STRIPE_SECRET_KEY
-
-    session = stripe.checkout.Session.create(
-        mode="subscription",
-        payment_method_types=["card"],
-        line_items=[
-            {
-                "price": settings.STRIPE_PRICE_ID,
-                "quantity": 1,
-            }
-        ],
-        success_url="https://mysite-2-w9ja.onrender.com/success/",
-        cancel_url="https://mysite-2-w9ja.onrender.com/cancel/",
-    )
-
-    return redirect(session.url, code=303)
+@csrf_exempt
+def stripe_webhook(request):
+    return HttpResponse("ok")
