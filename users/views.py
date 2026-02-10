@@ -1,8 +1,9 @@
-from django.shortcuts import redirect
-from django.http import HttpResponse
 from django.conf import settings
+from django.http import HttpResponse
+from django.shortcuts import redirect
 
 def subscribe(request):
+    # 念のためのガード
     if not settings.STRIPE_ENABLED:
         return HttpResponse("Stripe is disabled", status=503)
 
@@ -22,20 +23,16 @@ def subscribe(request):
         cancel_url="https://mysite-2-w9ja.onrender.com/cancel/",
     )
 
-    return redirect(session.url)
+    return redirect(session.url, code=303)
+
 
 def success(request):
     return HttpResponse(
-        """
-        <h1>支払いが完了しました 🎉</h1>
-        <p>ご利用ありがとうございます。</p>
-        """
+        "<h1>支払いが完了しました 🎉</h1>"
     )
+
 
 def cancel(request):
     return HttpResponse(
-        """
-        <h1>支払いはキャンセルされました</h1>
-        <p>いつでも再開できます。</p>
-        """
+        "<h1>支払いはキャンセルされました</h1>"
     )
