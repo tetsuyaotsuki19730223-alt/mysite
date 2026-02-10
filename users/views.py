@@ -19,3 +19,9 @@ def subscribe(request):
         cancel_url="https://mysite-2-w9ja.onrender.com/cancel/",
     )
     return redirect(session.url)
+
+def success(request):
+    return HttpResponse("✅ 支払い完了しました")
+
+def cancel(request):
+    return HttpResponse("❌ 支払いはキャンセルされました")
