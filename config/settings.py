@@ -65,13 +65,8 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 print("=== Django settings loaded ===")
 
-STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
-STRIPE_PUBLIC_KEY = 'pk_test_51StPOFBk6JKv0nP0XxKxkMJzyJI3t5b6TdJFeuhD6vmmUshOu6bWngciB9kzA90wSmXp2c5nP66rX6S1GVNCmor200NNQqPFeT'
 
-STRIPE_ENABLED = os.environ.get("STRIPE_ENABLED") == "True"
 
-STRIPE_WEBHOOK_SECRET = 'whsec_ff4166e4d752dac875f84cb090d4bc88fb59be08e59bfe27a69403fb3bea3b62'
-STRIPE_PRICE_ID = os.getenv("STRIPE_PRICE_ID")
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 
 EMAIL_HOST = "smtp.gmail.com"
@@ -82,3 +77,10 @@ EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 
 DEFAULT_FROM_EMAIL = "no-reply@yourdomain.com"
+
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "")
+STRIPE_PRICE_ID = os.getenv("STRIPE_PRICE_ID", "")
+STRIPE_PUBLIC_KEY = os.getenv("STRIPE_PUBLIC_KEY", "")
+STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET", "")
+
+STRIPE_ENABLED = bool(STRIPE_SECRET_KEY and STRIPE_PRICE_ID)
