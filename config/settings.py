@@ -78,7 +78,9 @@ EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 
 DEFAULT_FROM_EMAIL = "no-reply@yourdomain.com"
 
-# === Stripe settings (MUST ALWAYS EXIST) ===
+# ==============================
+# Stripe settings (FORCE LOAD)
+# ==============================
 import os
 
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "")
@@ -87,3 +89,7 @@ STRIPE_PUBLIC_KEY = os.getenv("STRIPE_PUBLIC_KEY", "")
 STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET", "")
 
 STRIPE_ENABLED = bool(STRIPE_SECRET_KEY and STRIPE_PRICE_ID)
+
+print(">>> STRIPE SETTINGS LOADED <<<")
+print("PRICE =", repr(STRIPE_PRICE_ID))
+print("ENABLED =", STRIPE_ENABLED)
