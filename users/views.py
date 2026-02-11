@@ -29,4 +29,22 @@ def subscribe(request):
 
 @csrf_exempt
 def stripe_webhook(request):
-    return HttpResponse("WEBHOOK OK")
+    payload = request.body
+    sig_header = request.META.get("HTTP_STRIPE_SIGNATURE")
+
+    print("🔥 WEBHOOK HIT")  # ← これ入れて！
+
+    try:
+        event = stripe.Webhook.construct_event(
+            payload,
+            sig_header,
+            settings.STRIPE_WEBHOOK_SECRET,
+        )
+    except Exception as e:
+        print("❌ WEBHOOK ERROR:", e)
+        return HttpResponse(str(e), status=400)
+
+    if event["type"] == "checkout.session.completed":
+        print("✅ checkout.session.completed received")
+
+    return HttpResponse("ok", status=200)
