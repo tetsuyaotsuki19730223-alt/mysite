@@ -4,6 +4,8 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from .decorators import subscription_required
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
 
 @subscription_required
 def dashboard(request):
@@ -46,10 +48,6 @@ def stripe_webhook(request):
     return HttpResponse("ok")
 
 def subscribe(request):
-    import stripe
-    from django.conf import settings
-    from django.http import HttpResponse
-
     stripe.api_key = settings.STRIPE_SECRET_KEY
 
     session = stripe.checkout.Session.create(
@@ -58,14 +56,11 @@ def subscribe(request):
             "price": settings.STRIPE_PRICE_ID,
             "quantity": 1,
         }],
-        metadata={
-            "price_id": settings.STRIPE_PRICE_ID,
-        },
-        success_url="https://mysite-2-w9ja.onrender.com/success/",
-        cancel_url="https://mysite-2-w9ja.onrender.com/cancel/",
+        success_url=request.build_absolute_uri("/success/"),
+        cancel_url=request.build_absolute_uri("/cancel/"),
     )
 
-    return HttpResponse(f"REDIRECT:{session.url}")
+    return redirect(session.url)
 
 # users/views.py
 def success(request):
@@ -135,3 +130,11 @@ def stripe_webhook(request):
             print("⚠️ Profile not found for customer:", customer_id)
 
     return HttpResponse("ok")
+
+@login_required
+def success(request):
+    return HttpResponse("✅ 支払いが完了しました！")
+
+@login_required
+def cancel(request):
+    return HttpResponse("❌ 支払いはキャンセルされました")

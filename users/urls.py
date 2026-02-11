@@ -1,11 +1,14 @@
-# users/urls.py
 from django.urls import path
-from .views import subscribe, stripe_webhook, success, cancel, dashboard
+from .views import (
+    subscribe,
+    stripe_webhook,
+    success,
+    cancel,
+)
 
 urlpatterns = [
     path("subscribe/", subscribe, name="subscribe"),
     path("stripe/webhook/", stripe_webhook, name="stripe-webhook"),
     path("success/", success, name="success"),
     path("cancel/", cancel, name="cancel"),
-    path("dashboard/", dashboard, name="dashboard"),
 ]
