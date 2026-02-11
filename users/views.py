@@ -9,6 +9,7 @@ from .decorators import subscription_required
 def dashboard(request):
     return HttpResponse("🎉 課金ユーザー専用ページ")
 
+# users/views.py
 @csrf_exempt
 def stripe_webhook(request):
     payload = request.body
@@ -21,14 +22,26 @@ def stripe_webhook(request):
             settings.STRIPE_WEBHOOK_SECRET,
         )
     except Exception as e:
-        print("❌ WEBHOOK ERROR:", e)
-        return HttpResponse(status=400)
+        return HttpResponse(str(e), status=400)
 
-    print("🔥 WEBHOOK HIT:", event["type"])
+    event_type = event["type"]
+    data = event["data"]["object"]
 
-    if event["type"] == "checkout.session.completed":
-        session = event["data"]["object"]
-        print("✅ checkout.session.completed")
+    # ✅ 課金完了
+    if event_type == "checkout.session.completed":
+        customer_id = data["customer"]
+        profile = Profile.objects.get(stripe_customer_id=customer_id)
+        profile.is_subscribed = True
+        profile.current_price_id = settings.STRIPE_PRICE_ID
+        profile.save()
+
+    # 🚨 解約イベント（ここが④）
+    if event_type == "customer.subscription.deleted":
+        customer_id = data["customer"]
+        profile = Profile.objects.get(stripe_customer_id=customer_id)
+        profile.is_subscribed = False
+        profile.current_price_id = None
+        profile.save()
 
     return HttpResponse("ok")
 
