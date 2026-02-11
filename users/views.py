@@ -5,7 +5,9 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from .decorators import subscription_required
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
+from users.models import Profile
+from django.contrib.auth.models import User
 
 @subscription_required
 def dashboard(request):
@@ -24,7 +26,32 @@ def stripe_webhook(request):
             settings.STRIPE_WEBHOOK_SECRET,
         )
     except Exception as e:
-        return HttpResponse(str(e), status=400)
+        print("❌ WEBHOOK ERROR:", e)
+        return HttpResponse(status=400)
+
+    print("🔥 WEBHOOK HIT:", event["type"])
+
+    if event["type"] == "checkout.session.completed":
+        session = event["data"]["object"]
+
+        user_id = session["metadata"].get("user_id")
+        price_id = session["display_items"][0]["price"]["id"] \
+            if "display_items" in session else settings.STRIPE_PRICE_ID
+
+        try:
+            user = User.objects.get(id=user_id)
+            profile, _ = Profile.objects.get_or_create(user=user)
+
+            profile.is_subscribed = True
+            profile.current_price_id = price_id
+            profile.save()
+
+            print(f"✅ SUBSCRIBED: user_id={user_id}")
+
+        except User.DoesNotExist:
+            print("❌ User not found:", user_id)
+
+    return HttpResponse("ok")
 
     event_type = event["type"]
     data = event["data"]["object"]
@@ -58,9 +85,12 @@ def subscribe(request):
         }],
         success_url=request.build_absolute_uri("/success/"),
         cancel_url=request.build_absolute_uri("/cancel/"),
+        metadata={
+            "user_id": request.user.id,
+        },
     )
 
-    return redirect(session.url)
+    return HttpResponse(f"REDIRECT:{session.url}")
 
 # users/views.py
 def success(request):
@@ -133,8 +163,8 @@ def stripe_webhook(request):
 
 @login_required
 def success(request):
-    return HttpResponse("✅ 支払いが完了しました！")
+    return HttpResponse("SUCCESS OK")
 
 @login_required
 def cancel(request):
-    return HttpResponse("❌ 支払いはキャンセルされました")
+    return HttpResponse("CANCELLED")
