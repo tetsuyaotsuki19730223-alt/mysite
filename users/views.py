@@ -16,3 +16,9 @@ def subscribe(request):
     )
 
     return HttpResponse(f"REDIRECT:{session.url}")
+
+def success(request):
+    return HttpResponse("PAYMENT SUCCESS 🎉")
+
+def cancel(request):
+    return HttpResponse("PAYMENT CANCELED")
