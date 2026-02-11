@@ -3,6 +3,11 @@ import stripe
 from django.conf import settings
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from .decorators import subscription_required
+
+@subscription_required
+def dashboard(request):
+    return HttpResponse("🎉 課金ユーザー専用ページ")
 
 @csrf_exempt
 def stripe_webhook(request):
