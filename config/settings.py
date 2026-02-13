@@ -1,5 +1,6 @@
 from pathlib import Path
 import os
+import dj_database_url
 
 ALLOWED_HOSTS = ["*"]
 
@@ -55,15 +56,14 @@ TEMPLATES = [
 WSGI_APPLICATION = "config.wsgi.application"
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
+    "default": dj_database_url.config(
+        default=os.environ.get("DATABASE_URL")
+    )
 }
 
 STATIC_URL = "/static/"
 STATICFILES_DIRS = []
-STATIC_ROOT = BASE_DIR / "staticfiles"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 print("=== Django settings loaded ===")
 
@@ -104,3 +104,5 @@ LOGOUT_REDIRECT_URL = "/accounts/login/"
 CSRF_TRUSTED_ORIGINS = [
     "https://mysite-production-0e1f2.up.railway.app",
 ]
+
+MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
