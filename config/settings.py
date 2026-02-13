@@ -93,3 +93,5 @@ print(">>> STRIPE SETTINGS LOADED <<<")
 print("PRICE =", repr(STRIPE_PRICE_ID))
 print("ENABLED =", STRIPE_ENABLED)
 # FORCE_GIT_CHANGE
+
+LOGIN_URL = "/admin/login/"
