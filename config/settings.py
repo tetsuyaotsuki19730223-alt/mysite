@@ -95,3 +95,5 @@ print("ENABLED =", STRIPE_ENABLED)
 # FORCE_GIT_CHANGE
 
 LOGIN_URL = "/admin/login/"
+LOGIN_REDIRECT_URL = "/premium/"
+LOGOUT_REDIRECT_URL = "/accounts/login/"
