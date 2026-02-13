@@ -99,3 +99,7 @@ print("ENABLED =", STRIPE_ENABLED)
 LOGIN_URL = "/accounts/login/"
 LOGIN_REDIRECT_URL = "/premium/"
 LOGOUT_REDIRECT_URL = "/accounts/login/"
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://mysite-production-0e1f2.up.railway.app",
+]
