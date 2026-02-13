@@ -103,7 +103,7 @@ def cancel(request):
 # =========================
 @login_required
 def premium(request):
-    profile = Profile.objects.get(user=request.user)
+    profile, _ = Profile.objects.get_or_create(user=request.user)
 
     if not profile.is_subscribed:
         return redirect("subscribe")
