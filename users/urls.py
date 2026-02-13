@@ -4,6 +4,7 @@ from .views import (
     stripe_webhook,
     success,
     cancel,
+    premium,
 )
 
 urlpatterns = [
@@ -11,4 +12,5 @@ urlpatterns = [
     path("stripe/webhook/", stripe_webhook, name="stripe-webhook"),
     path("success/", success, name="success"),
     path("cancel/", cancel, name="cancel"),
+    path("premium/", premium, name="premium"),
 ]

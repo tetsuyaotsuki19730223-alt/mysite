@@ -168,3 +168,12 @@ def success(request):
 @login_required
 def cancel(request):
     return HttpResponse("CANCELLED")
+
+@login_required
+def premium(request):
+    profile = Profile.objects.get(user=request.user)
+
+    if not profile.is_subscribed:
+        return redirect("subscribe")
+
+    return HttpResponse("🔥 PREMIUM CONTENT 🔥")
