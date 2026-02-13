@@ -1,6 +1,8 @@
 from pathlib import Path
 import os
 
+ALLOWED_HOSTS = ["*"]
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get(
@@ -9,7 +11,6 @@ SECRET_KEY = os.environ.get(
 )
 
 DEBUG = False
-ALLOWED_HOSTS = ["*"]
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
