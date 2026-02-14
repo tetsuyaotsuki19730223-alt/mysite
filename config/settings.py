@@ -2,7 +2,9 @@ from pathlib import Path
 import os
 import dj_database_url
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [
+    "mysite-production-0e1f2.up.railway.app",
+]
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -11,7 +13,7 @@ SECRET_KEY = os.environ.get(
     "django-insecure-fallback-key"
 )
 
-DEBUG = False
+DEBUG = True
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
