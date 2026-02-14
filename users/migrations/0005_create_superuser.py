@@ -13,7 +13,7 @@ def create_superuser(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("users", "0005_profile_stripe_customer_id_and_more"),  # ←最後の番号に合わせる
+        ("users", "0004_profile_stripe_customer_id_and_more"),
     ]
 
     operations = [
