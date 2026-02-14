@@ -110,3 +110,16 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
+
+import os
+
+if os.environ.get("AUTO_CREATE_SUPERUSER") == "1":
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+
+    username = "adminrail"
+    password = "Admin12345"
+
+    if not User.objects.filter(username=username).exists():
+        User.objects.create_superuser(username, "adminrail@example.com", password)
+        print("🔥 SUPERUSER CREATED")
