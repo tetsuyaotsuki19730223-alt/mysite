@@ -52,7 +52,12 @@ def stripe_webhook(request):
     # =========================
     # 決済完了
     # =========================
-    if event["type"] == "checkout.session.completed":
+    if event["type"] in [
+            "checkout.session.completed",
+            "invoice.payment_succeeded",
+            "customer.subscription.created"
+        ]:
+        print("🔥 EVENT TYPE:", event["type"])
         session = event["data"]["object"]
 
         email = session.get("customer_email")
