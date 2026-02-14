@@ -23,12 +23,10 @@ def subscribe(request):
         }],
         success_url=request.build_absolute_uri("/success/"),
         cancel_url=request.build_absolute_uri("/cancel/"),
-        metadata={
-            "user_id": request.user.id,
-        },
+        metadata={"user_id": request.user.id},
     )
 
-    return HttpResponse(f"REDIRECT:{session.url}")
+    return redirect(session.url)
 
 
 # =========================
