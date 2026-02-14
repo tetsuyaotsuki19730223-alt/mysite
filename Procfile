@@ -1,1 +1,1 @@
-web: python manage.py migrate && gunicorn config.wsgi:application --bind 0.0.0.0:$PORT
+web: python manage.py migrate && python manage.py shell -c "from django.contrib.auth import get_user_model; User=get_user_model(); User.objects.filter(username='adminrail').exists() or User.objects.create_superuser('adminrail','adminrail@example.com','Admin12345')" && gunicorn config.wsgi:application --bind 0.0.0.0:$PORT
