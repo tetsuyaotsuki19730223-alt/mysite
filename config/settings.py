@@ -3,10 +3,7 @@ import os
 import dj_database_url
 
 ALLOWED_HOSTS = [
-    "mysite-production-0e1f2.up.railway.app",
-    "web-createsuperuser-true.up.railway.app",
-    "localhost",
-    "127.0.0.1",
+    "*",
 ]
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -109,7 +106,7 @@ LOGIN_REDIRECT_URL = "/premium/"
 LOGOUT_REDIRECT_URL = "/accounts/login/"
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://mysite-production-0e1f2.up.railway.app",
+    "https://*.railway.app",
 ]
 
 MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
