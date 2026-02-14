@@ -49,38 +49,30 @@ def stripe_webhook(request):
         print("❌ WEBHOOK ERROR:", e)
         return HttpResponse(status=400)
 
-    print("🔥 WEBHOOK HIT:", event["type"])
-
+    # =========================
     # 決済完了
+    # =========================
     if event["type"] == "checkout.session.completed":
         session = event["data"]["object"]
+        print("✅ checkout.session.completed")
+
         user_id = session["metadata"].get("user_id")
 
-        try:
-            user = User.objects.get(id=user_id)
-            profile, _ = Profile.objects.get_or_create(user=user)
+        if user_id:
+            from django.contrib.auth.models import User
+            from .models import Profile
 
-            profile.is_subscribed = True
-            profile.current_price_id = settings.STRIPE_PRICE_ID
-            profile.save()
+            try:
+                user = User.objects.get(id=user_id)
+                profile, _ = Profile.objects.get_or_create(user=user)
 
-            print("🎉 SUBSCRIPTION ON")
-        except User.DoesNotExist:
-            print("⚠️ User not found:", user_id)
+                profile.is_subscribed = True
+                profile.current_price_id = settings.STRIPE_PRICE_ID
+                profile.save()
 
-    # 解約
-    if event["type"] == "customer.subscription.deleted":
-        subscription = event["data"]["object"]
-        customer_id = subscription.get("customer")
-
-        try:
-            profile = Profile.objects.get(stripe_customer_id=customer_id)
-            profile.is_subscribed = False
-            profile.current_price_id = None
-            profile.save()
-            print("🛑 SUBSCRIPTION OFF")
-        except Profile.DoesNotExist:
-            print("⚠️ Profile not found")
+                print("🎉 SUBSCRIPTION ON")
+            except User.DoesNotExist:
+                print("⚠️ User not found:", user_id)
 
     return HttpResponse("ok")
 
