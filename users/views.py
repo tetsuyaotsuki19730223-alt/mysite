@@ -54,25 +54,24 @@ def stripe_webhook(request):
     # =========================
     if event["type"] == "checkout.session.completed":
         session = event["data"]["object"]
-        print("✅ checkout.session.completed")
 
-        user_id = session["metadata"].get("user_id")
+        email = session.get("customer_email")
 
-        if user_id:
-            from django.contrib.auth.models import User
-            from .models import Profile
+    if email:
+        from django.contrib.auth.models import User
+        from .models import Profile
 
-            try:
-                user = User.objects.get(id=user_id)
-                profile, _ = Profile.objects.get_or_create(user=user)
+        try:
+            user = User.objects.get(email=email)
+            profile, _ = Profile.objects.get_or_create(user=user)
+            profile.is_subscribed = True
+            profile.current_price_id = settings.STRIPE_PRICE_ID
+            profile.save()
 
-                profile.is_subscribed = True
-                profile.current_price_id = settings.STRIPE_PRICE_ID
-                profile.save()
+            print("🎉 SUBSCRIPTION ON")
 
-                print("🎉 SUBSCRIPTION ON")
-            except User.DoesNotExist:
-                print("⚠️ User not found:", user_id)
+        except User.DoesNotExist:
+            print("⚠️ User not found:", email)
 
     return HttpResponse("ok")
 
