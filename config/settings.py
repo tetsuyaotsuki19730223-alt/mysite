@@ -4,6 +4,9 @@ import dj_database_url
 
 ALLOWED_HOSTS = [
     "mysite-production-0e1f2.up.railway.app",
+    "web-createsuperuser-true.up.railway.app",
+    "localhost",
+    "127.0.0.1",
 ]
 
 BASE_DIR = Path(__file__).resolve().parent.parent
