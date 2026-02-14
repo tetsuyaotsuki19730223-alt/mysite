@@ -113,13 +113,7 @@ MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
 
 import os
 
-if os.environ.get("AUTO_CREATE_SUPERUSER") == "1":
-    from django.contrib.auth import get_user_model
-    User = get_user_model()
-
-    username = "adminrail"
-    password = "Admin12345"
-
-    if not User.objects.filter(username=username).exists():
-        User.objects.create_superuser(username, "adminrail@example.com", password)
-        print("🔥 SUPERUSER CREATED")
+if os.environ.get("RAILWAY_ENVIRONMENT"):
+    os.environ.setdefault("DJANGO_SUPERUSER_USERNAME", "adminrail")
+    os.environ.setdefault("DJANGO_SUPERUSER_PASSWORD", "Admin12345")
+    os.environ.setdefault("DJANGO_SUPERUSER_EMAIL", "adminrail@example.com")
