@@ -13,7 +13,7 @@ SECRET_KEY = os.environ.get(
     "django-insecure-fallback-key"
 )
 
-DEBUG = True
+DEBUG = False
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
