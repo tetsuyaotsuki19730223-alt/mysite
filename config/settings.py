@@ -117,3 +117,5 @@ if os.environ.get("RAILWAY_ENVIRONMENT"):
     os.environ.setdefault("DJANGO_SUPERUSER_USERNAME", "adminrail")
     os.environ.setdefault("DJANGO_SUPERUSER_PASSWORD", "Admin12345")
     os.environ.setdefault("DJANGO_SUPERUSER_EMAIL", "adminrail@example.com")
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
