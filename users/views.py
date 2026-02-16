@@ -49,15 +49,16 @@ def stripe_webhook(request):
 
     print("🔥 WEBHOOK HIT:", event["type"])
 
-    # checkout完了だけでOK（まずは確実に）
     if event["type"] == "checkout.session.completed":
 
         session = event["data"]["object"]
-        email = session.get("customer_details", {}).get("email")
 
-        if email:
+        # ✅ metadata から user_id を取る（これが確実）
+        user_id = session.get("metadata", {}).get("user_id")
+
+        if user_id:
             try:
-                user = User.objects.get(email=email)
+                user = User.objects.get(id=user_id)
                 profile, _ = Profile.objects.get_or_create(user=user)
                 profile.is_subscribed = True
                 profile.current_price_id = settings.STRIPE_PRICE_ID
@@ -66,7 +67,7 @@ def stripe_webhook(request):
                 print("🎉 SUBSCRIPTION ON")
 
             except User.DoesNotExist:
-                print("⚠️ User not found:", email)
+                print("⚠️ User not found:", user_id)
 
     return HttpResponse("ok")
 
