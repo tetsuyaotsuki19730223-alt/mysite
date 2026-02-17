@@ -34,41 +34,8 @@ def subscribe(request):
 # =========================
 @csrf_exempt
 def stripe_webhook(request):
-    payload = request.body
-    sig_header = request.META.get("HTTP_STRIPE_SIGNATURE")
-
-    try:
-        event = stripe.Webhook.construct_event(
-            payload,
-            sig_header,
-            settings.STRIPE_WEBHOOK_SECRET,
-        )
-    except Exception as e:
-        print("❌ WEBHOOK ERROR:", e)
-        return HttpResponse(status=400)
-
-    print("🔥 WEBHOOK HIT:", event["type"])
-
-    if event["type"] == "checkout.session.completed":
-
-        session = event["data"]["object"]
-
-        # ✅ metadata から user_id を取る（これが確実）
-        user_id = session.get("metadata", {}).get("user_id")
-
-        if user_id:
-            try:
-                user = User.objects.get(id=user_id)
-                profile, _ = Profile.objects.get_or_create(user=user)
-                profile.is_subscribed = True
-                profile.current_price_id = settings.STRIPE_PRICE_ID
-                profile.save()
-
-                print("🎉 SUBSCRIPTION ON")
-
-            except User.DoesNotExist:
-                print("⚠️ User not found:", user_id)
-
+    print("🔥 WEBHOOK CALLED")
+    print(request.body)
     return HttpResponse("ok")
 
 
@@ -77,7 +44,12 @@ def stripe_webhook(request):
 # =========================
 @login_required
 def success(request):
-    return HttpResponse("SUCCESS OK")
+    profile, _ = Profile.objects.get_or_create(user=request.user)
+    profile.is_subscribed = True
+    profile.current_price_id = settings.STRIPE_PRICE_ID
+    profile.save()
+
+    return HttpResponse("🎉 SUBSCRIPTION ACTIVATED")
 
 
 @login_required
