@@ -3,7 +3,7 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.contrib.auth.models import User
 from .models import Profile
 
@@ -68,3 +68,6 @@ def premium(request):
         return redirect("subscribe")
 
     return HttpResponse("🔥 PREMIUM CONTENT 🔥")
+
+def home(request):
+    return render(request, "home.html")

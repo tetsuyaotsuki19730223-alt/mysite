@@ -6,11 +6,13 @@ from .views import (
     cancel,
     premium,
 )
+from . import views
 
 urlpatterns = [
-    path("subscribe/", subscribe, name="subscribe"),
-    path("stripe/webhook/", stripe_webhook, name="stripe-webhook"),
-    path("success/", success, name="success"),
-    path("cancel/", cancel, name="cancel"),
-    path("premium/", premium, name="premium"),
+    path("", views.home, name="home"),
+    path("subscribe/", views.subscribe, name="subscribe"),
+    path("success/", views.success, name="success"),
+    path("cancel/", views.cancel, name="cancel"),
+    path("premium/", views.premium, name="premium"),
+    path("stripe/webhook/", views.stripe_webhook),
 ]

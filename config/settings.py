@@ -57,13 +57,25 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-DATABASES = {
-    "default": dj_database_url.config(
-        default=os.environ.get("DATABASE_URL"),
-        conn_max_age=600,
-        ssl_require=True,
-    )
-}
+# ==============================
+# DATABASE
+# ==============================
+
+if os.environ.get("DATABASE_URL"):
+    DATABASES = {
+        "default": dj_database_url.config(
+            default=os.environ.get("DATABASE_URL"),
+            conn_max_age=600,
+            ssl_require=True,
+        )
+    }
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 
 STATIC_URL = "/static/"
 STATICFILES_DIRS = []
@@ -97,6 +109,7 @@ STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET", "")
 STRIPE_ENABLED = bool(STRIPE_SECRET_KEY and STRIPE_PRICE_ID)
 
 print(">>> STRIPE SETTINGS LOADED <<<")
+print("WEBHOOK SECRET =", repr(STRIPE_WEBHOOK_SECRET))
 print("PRICE =", repr(STRIPE_PRICE_ID))
 print("ENABLED =", STRIPE_ENABLED)
 # FORCE_GIT_CHANGE
